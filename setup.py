@@ -5,9 +5,9 @@ setup(
     version="5.4.1",
     description="Downloads songs, albums or playlists from deezer",
     license="Apache-2.0",
-    author="An0nimia",
-    author_email="An0nimia@protonmail.com",
-    url="https://github.com/An0nimia/deezloader",
+    author="Phani Rithvij",
+    author_email="phanirithvij2000@gmail.com",
+    url="https://github.com/phanirithvij/deezloader",
     packages=["deezloader"],
     install_requires=['mutagen', 'requests', 'spotipy', 'tqdm']
 )
