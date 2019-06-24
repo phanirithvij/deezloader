@@ -365,7 +365,6 @@ class Deezer:
         datas['duration'] = str(url['duration'])
         datas['isrc'] = url['isrc']
         album = var_excape(datas['album'])
-        print('type', type(output), type(localdir))
         dir = output / (album + " " + url1['upc'])
         try:
             os.makedirs(dir)
