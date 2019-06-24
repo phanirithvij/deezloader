@@ -11,6 +11,7 @@ from deezloader.utils import genurl, calcbfkey
 from deezloader.config import header, qualities, localdir
 from deezloader.exceptions import *
 
+
 def generate_token():
     return oauth2.SpotifyClientCredentials(
         client_id="c6b23f1e91f84b6a9361de16aba0ae17",
@@ -66,10 +67,10 @@ class Deezer:
                                 allow_redirects=True).text
             if "try Deezer in your country before anyone else" in data:
                 raise NotAvailableInYourRegion(
-                    """
-                    Not available in your country.
-                    Maybe use a proxy?
-                    """
+                    (
+                        "\nDeezer is not available in your country.\n"
+                        "Maybe use a proxy? Follow this https://bit.ly/2xaTI7N"
+                    )
                 )
             if data.split("'deezer_user_id': ")[1].split(",")[0] == "0":
                 raise BadCredentials("Wrong token :(")
