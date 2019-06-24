@@ -2,3 +2,4 @@ Songs/
 *.pyc
 __pycache__/
 music/
+.env

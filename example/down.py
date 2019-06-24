@@ -1,8 +1,9 @@
 import os
-from dotenv import load_dotenv
 import sys
+from dotenv import load_dotenv, find_dotenv
 from pathlib import Path
 sys.path.append(str(Path('.').absolute().parent))
+
 from deezloader import Deezer
 
 # MUST have a .env file with contents
@@ -11,8 +12,7 @@ from deezloader import Deezer
 # EMAIL="your deezer email"
 # PASS="your password"
 
-env_path = Path('.') / '.env'
-load_dotenv(dotenv_path=env_path, verbose=True)
+load_dotenv(find_dotenv(), verbose=True)
 
 arl = os.getenv('ARL')
 email = os.getenv('EMAIL')
