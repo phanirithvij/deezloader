@@ -1,7 +1,9 @@
 import os
 from dotenv import load_dotenv
+import sys
 from pathlib import Path
-import deezloader
+sys.path.append(str(Path('.').absolute().parent))
+from deezloader import Deezer
 
 # MUST have a .env file with contents
 
@@ -40,5 +42,5 @@ if __name__ == "__main__":
     print(arl)
     print(email)
     print(passwd)
-    dezz = deezloader.Login(email, passwd, token=arl)
+    dezz = Deezer(email, passwd, token=arl)
     dl_song(dezz, url="https://open.spotify.com/track/543bCW2ruMPmxUBWirQ3MR")

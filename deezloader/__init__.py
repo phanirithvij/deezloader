@@ -8,63 +8,8 @@ from spotipy import Spotify, oauth2
 from collections import OrderedDict
 from deezloader.utils import decryptfile, write_tags, var_excape
 from deezloader.utils import genurl, calcbfkey
-
-localdir = Path('.') / 'Songs'
-
-qualities = {"FLAC": {
-    "quality": "9",
-    "extension": ".flac",
-    "qualit": "FLAC"
-},
-    "MP3_320": {
-    "quality": "3",
-    "extension": ".mp3",
-    "qualit": "320"
-},
-    "MP3_256": {
-    "quality": "5",
-    "extension": ".mp3",
-    "qualit": "256"
-},
-    "MP3_128": {
-    "quality": "1",
-    "extension": ".mp3",
-    "qualit": "128"
-}
-}
-header = {"Accept-Language": "en-US,en;q=0.5",
-          'accept-encoding': 'application/json'}
-
-
-class TrackNotFound(Exception):
-    def __init__(self, message):
-        super().__init__(message)
-
-
-class AlbumNotFound(Exception):
-    def __init__(self, message):
-        super().__init__(message)
-
-
-class InvalidLink(Exception):
-    def __init__(self, message):
-        super().__init__(message)
-
-
-class BadCredentials(Exception):
-    def __init__(self, message):
-        super().__init__(message)
-
-
-class QuotaExceeded(Exception):
-    def __init__(self, message):
-        super().__init__(message)
-
-
-class QualityNotFound(Exception):
-    def __init__(self, message):
-        super().__init__(message)
-
+from deezloader.config import header, qualities, localdir
+from deezloader.exceptions import *
 
 def generate_token():
     return oauth2.SpotifyClientCredentials(
@@ -78,11 +23,7 @@ def request(url, control=False):
         thing = requests.get(url, headers=header)
     except:
         thing = requests.get(url, headers=header)
-    # print(thing)
-    print(url)
-    # print(thing.text)
-    # print(thing.content)
-    # print(thing.__dir__())
+    # print(url)
     if control == True:
         try:
             if thing.json()['error']['message'] == "no data":
@@ -102,7 +43,7 @@ def request(url, control=False):
     return thing
 
 
-class Login:
+class Deezer:
     def __init__(self, mail, password, token=None):
         self.spo = Spotify(auth=generate_token())
         self.req = requests.Session()
@@ -121,21 +62,18 @@ class Login:
             if token == None:
                 raise BadCredentials(end + ", and no token provided")
             self.req.cookies["arl"] = token
-            # proxies = {
-            #     'http': 'http://127.0.0.1:9000',
-            #     'https': 'http://127.0.0.1:9000'
-            # }
-          #   self.req.trust_env = False
-          #   self.req.proxies.update(proxies)
             data = self.req.get("https://www.deezer.com/",
                                 allow_redirects=True).text
-          #   print(data)
             if "try Deezer in your country before anyone else" in data:
-                raise BadCredentials(
-                    "Not available in your country. Maybe use a proxy?")
+                raise NotAvailableInYourRegion(
+                    """
+                    Not available in your country.
+                    Maybe use a proxy?
+                    """
+                )
             if data.split("'deezer_user_id': ")[1].split(",")[0] == "0":
                 raise BadCredentials("Wrong token :(")
-            print('You\'re in :) (:')
+            print("You're in :)")
 
     def get_api(self, method=None, api_token="null", json=None):
         params = {
@@ -149,7 +87,16 @@ class Login:
         except:
             return self.req.post("https://www.deezer.com/ajax/gw-light.php", params=params, json=json).json()['results']
 
-    def download(self, link, name, quality, recursive_quality, recursive_download, datas, create_zip=False):
+    def download(
+        self,
+        link,
+        name,
+        quality,
+        recursive_quality,
+        recursive_download,
+        datas,
+        create_zip=False
+    ):
         if not quality in qualities:
             raise QualityNotFound(
                 "The qualities have to be FLAC or MP3_320 or MP3_256 or MP3_128")
