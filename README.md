@@ -2,11 +2,17 @@
 
 This project has been created to download songs, albums or playlists with Spotify or Deezer link from Deezer.
 
--   ### OS Supported
-    ![Linux Support](https://img.shields.io/badge/Linux-Support-brightgreen.svg)
-    ![macOS Support](https://img.shields.io/badge/macOS-Support-brightgreen.svg)
--   ### Installation
-        pip3 install deezloader
+### OS Supported
+
+![Linux Support](https://img.shields.io/badge/Linux-Supported-brightgreen.svg)
+![macOS Support](https://img.shields.io/badge/macOS-unsure-pink.svg)
+![Windows Support](https://img.shields.io/badge/Windows-Supported-brightgreen.svg)
+
+### Installation
+
+```shell
+python3 -m pip install git+https://github.com/phanirithvij/deezloader
+```
 
 ### Download song
 
@@ -21,7 +27,7 @@ downloa.download_trackspo("Insert the Spotify link of the track to download", ou
 #recursive=False for download the song if quality seletecd chose doesn't exist
 ```
 
-Download track by Deezer link
+Download track from a Deezer url
 
 ```python
 import deezloader
